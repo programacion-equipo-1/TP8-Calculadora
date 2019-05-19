@@ -167,5 +167,13 @@ int str2float(char* cadena,float* numero){
 
 
 int is_a_number(char* cadena){
+    int error;
+    float aux;
     
+    error = str2float(cadena,&aux);
+    
+    if (error==ERROR){
+        return FALSO;
+    }
+    return VERDAD;
 }
