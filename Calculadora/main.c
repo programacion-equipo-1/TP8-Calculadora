@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
     
     printf("RESULTADO:\n\t%f\n",resultado);
     printf("Que tenga un maravilloso día ♡ ♡ ♡\n");
+
     return 0;
 }
 
