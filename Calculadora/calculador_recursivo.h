@@ -26,9 +26,9 @@
  *  (tal como dividir por 0), ingresar un símbolo desconocido, o si falta un operando.
  * 
  *  Por ejemplo,
- *      + - 5 3 * 2 4
+ *      + - 5 3 x 2 4
  *  Se traduce a
- *  (5-3)+(2*4) = 10
+ *  (5-3)x(2*4) = 10
  * 
  * NOTA: deben de haberse inicializado los arreglos del módulo MANEJO_DE_ARREGLOS antes de su uso
  * NOTA: el puntero al arreglo de punteros se verá modificado en cada llamado a esta función.

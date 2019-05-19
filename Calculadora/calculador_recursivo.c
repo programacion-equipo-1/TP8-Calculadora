@@ -95,7 +95,7 @@ int calculador_recursivo(char*** next,float* rta){
     //realiza la operación deseada, y se pregunta si hubo un error durante la operación
     error = operador(operando1,operando2,operacion,rta);//al mismo tiempo, se escribe la respuesta en *rta
     if (error==VERDAD){ //Si hubo un error durante la operación, lo notifica
-        printf("Calc: ERROR: error durante la operación");
+        printf("Calc: ERROR: error durante la operación\n");
         return ERROR;
     }
     return SIN_ERROR; //Si el programa se ejecuto sin errores, finaliza aqui
