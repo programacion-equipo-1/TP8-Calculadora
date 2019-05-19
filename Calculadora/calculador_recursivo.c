@@ -35,35 +35,46 @@ int calculador_recursivo(char*** next,float* rta){
     char operacion;
     int error=FALSO;
     
-    if(**next == NULL){
+    //Nota: los argumentos son leidos empleando la notación polaca
+    
+    // BUSQUEDA DE LA OPERACION
+    
+    if(**next == NULL){ //Si el argumento actual es NULL, notifica el error
         printf("Calc: ERROR: FALTA ARGUMENTO - Se esperaba una operación\n");
         return ERROR;
     }
-    if(is_a_number(**next)==VERDAD){
+    if(is_a_number(**next)==VERDAD){ //Si es un número, notifica el error
         printf("Calc: ERROR: Se esperaba una operación - Se encontró un número\n");
         return ERROR;
     }
     if( (**next)[1] != '\0' || existe_op(***next) == FALSO ){
+        // Si no es una operación presente en el arreglo de operaciones válidas,
+        //o la misma está compuesta por más de un caracter, notifica el error
         printf("Calc: ERROR: Operación inválida/desconocida\n");
         return ERROR;
     }
-    operacion = ***next;
-    (*next)++;
+    operacion = ***next; //Si no hubo error, el argumento es una operación válida
+    (*next)++; //avanza al siguiente argumento
     
+    // BUSQUEDA DEL PRIMER OPERANDO
     
-    if(**next == NULL){
+    if(**next == NULL){ //Si el argumento actual es NULL, notifica el error
         printf("Calc: ERROR: FALTA ARGUMENTO - Se esperaba un número\n");
         return ERROR;
     }
-    if(is_a_number(**next)==VERDAD){
-        str2float(**next,&operando1);
-    }else{
-        error = calculador_recursivo(next,&operando1);
-        if (error==VERDAD){
-            return ERROR;
+    if(is_a_number(**next)==VERDAD){ //Si es un número (con formato válido)
+        str2float(**next,&operando1); //...lo transforma en float
+    }else{ //Si no es un número, debe ser una nueva operación.
+        //En dicho caso, se derivará de manera recursiva a una nueva instancia del calculador
+        error = calculador_recursivo(next,&operando1); //Se pregunta si dicha instancia no tuvo errores
+        if (error==VERDAD){ //Si hubo un error...
+            return ERROR; //...lo informa y sale inmediatamente
         }
     }
-    (*next)++;
+    (*next)++;//Avanza al próximo argumento
+    
+    // BUSQUEDA DEL SEGUNDO OPERANDO
+    // Se realiza del mismo modo que con el primer operando...
     
     if(**next == NULL){
         printf("Calc: ERROR: FALTA ARGUMENTO - Se esperaba un número\n");
@@ -77,13 +88,16 @@ int calculador_recursivo(char*** next,float* rta){
             return ERROR;
         }
     }
+    //...excepto porque no se avanza el ìndice al próximo argumento. Así, todas las intancias del
+    //calculador acaban apuntando al último argumento empleado
     
     
-    error = operador(operando1,operando2,operacion,rta);
-    if (error==VERDAD){
+    //realiza la operación deseada, y se pregunta si hubo un error durante la operación
+    error = operador(operando1,operando2,operacion,rta);//al mismo tiempo, se escribe la respuesta en *rta
+    if (error==VERDAD){ //Si hubo un error durante la operación, lo notifica
         printf("Calc: ERROR: error durante la operación");
         return ERROR;
     }
-    return SIN_ERROR;
+    return SIN_ERROR; //Si el programa se ejecuto sin errores, finaliza aqui
     
 }
