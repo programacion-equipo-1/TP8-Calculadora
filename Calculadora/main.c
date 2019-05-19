@@ -48,19 +48,21 @@ int main(int argc, char* argv[]) {
 void test (void){
     
     float f;
-    if (str2float("3",&f) == SIN_ERROR){
-        printf("%f",f);
+    if (str2float("2e20",&f) == SIN_ERROR){
+        printf("%g\n",f);
     }
-    if (str2float("24",&f) == SIN_ERROR){
-        printf("%f",f);
+    if (str2float("+.2e-0",&f) == SIN_ERROR){
+        printf("%g\n",f);
     }
-    if (str2float("-12",&f) == SIN_ERROR){
-        printf("%f",f);
+    if (str2float("00000024.100000",&f) == SIN_ERROR){
+        printf("%g\n",f);
     }
-    if (str2float("2.5",&f) == SIN_ERROR){
-        printf("%f",f);
+    if (str2float("17e+",&f) == SIN_ERROR){
+        printf("%g\n",f);
     }
-    if (str2float("2e4",&f) == SIN_ERROR){
-        printf("%f",f);
+    if (str2float("2e0004",&f) == SIN_ERROR){
+        printf("%g\n",f);
     }
+    
+    printf("%i\n",is_a_number("24e"));
 }
