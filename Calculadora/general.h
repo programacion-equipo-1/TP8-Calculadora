@@ -19,5 +19,8 @@
 #define VERDAD 1
 #define FALSO 0
 
+#define POSITIVO 0
+#define NEGATIVO 1
+
 #endif /* GENERAL_H */
 

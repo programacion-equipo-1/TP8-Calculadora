@@ -28,8 +28,5 @@
 int str2float(char* cadena,float* numero);
 int is_a_number(char* cadena);
 
-#define POSITIVO 0
-#define NEGATIVO 1
-
 #endif /* NUMEROS_Y_CADENAS_H */
 

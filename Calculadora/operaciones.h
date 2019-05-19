@@ -23,6 +23,7 @@ int suma(float op1,float op2,float* rta);
 int resta(float op1,float op2,float* rta);
 int division(float op1,float op2,float* rta);
 int multiplicacion(float op1,float op2,float* rta);
+int potencia_entera(float op1,float op2,float* rta);
 
 #endif /* OPERACIONES_H */
 
