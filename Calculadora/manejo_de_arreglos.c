@@ -17,7 +17,7 @@ int add_op(char simbolo, int(*funcion)(float,float,float*) ){
     int i;
     
     if(indice>=MAX){
-        printf("AddOp: ERROR: Se excedió el número máximo de operaciones agregables\0");
+        printf("AddOp: ERROR: Se excedió el número máximo de operaciones agregables\n");
         return ERROR;
     }
 

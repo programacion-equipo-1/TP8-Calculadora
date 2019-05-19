@@ -2,229 +2,170 @@
 #include "general.h"
 #include "numeros_y_cadenas.h"
 
+#define es_cifra(c) ( (c)>='0' && (c)<='9' )
 
-//is_a_number toma el valor de un puntero a char, pensado para strings, en el que recorre el string 
-//y decide si ese string corresponde a un numero o no
-int is_a_number(char*p){
-    int es=1;
-    int flag=0;
-    int cantdig=0;
-    int neg=0;
-    while((*p)!='\0'){
-        if((*p)=='-'){
-            neg=1;  
+int str2float(char* cadena,float* numero){
+    enum states{INICIAL,LISTO_SIGNO,ENTERO,SIN_ENTERO,DECIMAL,INICIO_EXPO,SIGNO_EXPO,EXPO,SALIR};
+    int estado=INICIAL;
+    
+    int signo=POSITIVO;
+    int entero=0;
+    int decimal=0;
+    int cifras_dec=0;
+    int signo_expo=POSITIVO;
+    int expo=0;
+    float rta=0;
+    int i;
+    float temp;
+    
+    while(estado!=SALIR){
+        switch (estado){
+            
+            case INICIAL:
+                if (es_cifra(*cadena)){
+                    entero=(*cadena)-'0';
+                    estado=ENTERO;
+                } else if (*cadena == '+'){
+                    signo=POSITIVO;
+                    estado=LISTO_SIGNO;
+                } else if (*cadena == '-'){
+                    signo=NEGATIVO;
+                    estado=LISTO_SIGNO;
+                } else if (*cadena == '.'){
+                    estado=SIN_ENTERO;
+                } else {
+                    printf("Str2Float: ERROR\n");
+                    return ERROR;
+                }
+                break;
+            
+            case LISTO_SIGNO:
+                if(es_cifra(*cadena)){
+                    entero=(*cadena)-'0';
+                    estado=ENTERO;
+                } else if (*cadena == '.'){
+                    estado=SIN_ENTERO;
+                } else{
+                    printf("Str2Float: ERROR\n");
+                    return ERROR;
+                }
+                break;
+            
+            case ENTERO:
+                if(es_cifra(*cadena)){
+                    entero*=10;
+                    entero+= (*cadena)-'0';
+                    estado=ENTERO;
+                } else if (*cadena == '.'){
+                    estado=DECIMAL;
+                } else if (*cadena == 'E' || *cadena == 'e'){
+                    estado=INICIO_EXPO;
+                } else if (*cadena == '\0'){
+                    estado=SALIR;
+                } else {
+                    printf("Str2Float: ERROR\n");
+                    return ERROR;
+                }
+                break;
+            
+            case SIN_ENTERO:
+                if(es_cifra(*cadena)){
+                    decimal = (*cadena)-'0';
+                    cifras_dec++;
+                    estado=DECIMAL;
+                } else {
+                    printf("Str2Float: ERROR\n");
+                    return ERROR;
+                }
+                break;
+            
+            case DECIMAL:
+                if(es_cifra(*cadena)){
+                    decimal *=10;
+                    decimal += (*cadena)-'0';
+                    cifras_dec++;
+                    estado=DECIMAL;
+                } else if(*cadena =='E'||*cadena =='e'){
+                    estado = INICIO_EXPO;
+                } else if(*cadena == '\0'){
+                    estado = SALIR;
+                } else {
+                    printf("Str2Float: ERROR\n");
+                    return ERROR;
+                }
+                break;
+            
+            case INICIO_EXPO:
+                if(es_cifra(*cadena)){
+                    expo = (*cadena)-'0';
+                    estado = EXPO;
+                }else if(*cadena == '+'){
+                    signo_expo=POSITIVO;
+                    estado=SIGNO_EXPO;
+                }else if(*cadena=='-'){
+                    signo_expo=NEGATIVO;
+                    estado=SIGNO_EXPO;
+                }else{
+                    printf("Str2Float: ERROR\n");
+                    return ERROR;
+                }
+                break;
+                
+            case SIGNO_EXPO:
+                if (es_cifra(*cadena)){
+                    expo = (*cadena)-'0';
+                    estado=EXPO;
+                } else {
+                    printf("Str2Float: ERROR\n");
+                    return ERROR;
+                }
+                break;
+            
+            case EXPO:
+                if (es_cifra(*cadena)){
+                    expo*=10;
+                    expo+=(*cadena)-'0';
+                    estado=EXPO;
+                }else if(*cadena =='\0'){
+                    estado=SALIR;
+                }else{
+                    printf("Str2Float: ERROR\n");
+                    return ERROR;
+                }
+                break;  
         }
-        if( ((*p) >= '0') && ((*p) <= '9') ){
-            cantdig++;
-        }else if((*p) == '.'){
-            flag++;
-        }else if((*p)=='-'){
-            if(cantdig>0){
-                es=0;
-            }
-        }else{
-            es=0;
+        cadena++; 
+    }
+    
+    rta = (float) entero;
+    
+    temp = (float) decimal;
+    
+    for(i=0;i<cifras_dec;i++){
+        temp/=10.;
+    }
+    rta += temp;
+    
+    if (signo_expo == POSITIVO){
+        for(i=0;i<expo;i++){
+            rta *= 10.;
         }
-        
-    p++;
+    }else{
+        for(i=0;i<expo;i++){
+            rta /= 10.;
+        }
     }
-    if(flag>1){
-    es=0;
+    
+    if (signo == NEGATIVO){
+        rta *= -1.;
     }
-    if(cantdig==0){
-        es=0;
-    }
-    return es;    
+    
+    *numero = rta;
+    return SIN_ERROR;
 }
 
-float str2float(char *p,float *f){
-    float num=0;
-    float numdec=0;
-    int flag=0;
-    int counter=0;
-    int validacion;
-    int numneg;
-    validacion = is_a_number(p);
-    if(validacion){
-        while((*p)!='\0'){
 
-            if((*p)=='.'){
-                flag=1;
-            }
-            if((*p)=='-'){
-                numneg=1;
-            }
 
-        if( flag==0){
-            
-            if( (((*p) >= '0') || ((*p) <= '9'))){
-                
-                switch(*p){
-                    case '0':
-                    num=  num+0;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0') && ((*(p+1)) != '.')){
-                        //si hay un numero despues, multiplico por 10
-                        num=num*10;
-                    }
-                    break;
-                    case '1':
-                    num=  num+1;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')  && ((*(p+1)) != '.')){
-                        //si hay un numero despues, multiplico por 10
-                        num=num*10;
-                    }
-                    break;
-                    case '2':
-                    num=  num+2;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')  && ((*(p+1)) != '.')){
-                        //si hay un numero despues, multiplico por 10
-                        num=num*10;
-                    }
-                    break;
-                    case '3':
-                    num=  num+3;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')  && ((*(p+1)) != '.')){
-                        //si hay un numero despues, multiplico por 10
-                        num=num*10;
-                    }
-                    break;
-                    case '4':
-                    num=  num+4;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')  && ((*(p+1)) != '.')){
-                        //si hay un numero despues, multiplico por 10
-                        num=num*10;
-                    }
-                    break;
-                    case '5':
-                    num=  num+5;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')  && ((*(p+1)) != '.')){
-                        //si hay un numero despues, multiplico por 10
-                        num=num*10;
-                    }
-                    break;
-                    case '6':
-                    num=  num+6;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')  && ((*(p+1)) != '.')){
-                        //si hay un numero despues, multiplico por 10
-                        num=num*10;
-                    }
-                    break;
-                    case '7':
-                    num=  num+7;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')  && ((*(p+1)) != '.')){
-                        //si hay un numero despues, multiplico por 10
-                        num=num*10;
-                    }
-                    break;
-                    case '8':
-                    num=  num+8;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')  && ((*(p+1)) != '.')){
-                        //si hay un numero despues, multiplico por 10
-                        num=num*10;
-                    }
-                    break;
-                    case '9':
-                    num=  num+9;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')  && ((*(p+1)) != '.')){
-                        //si hay un numero despues, multiplico por 10
-                        num=num*10;
-                    }
-                    break;
-                }
-                
-            }
-        }else if(flag==1){
-            counter = counter +1;
-            switch(*p){
-
-                    case '0':
-                    numdec=  numdec+0;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')){
-                        //si hay un numero despues, multiplico por 10
-                        numdec=numdec*10;
-                    }
-                    break;
-                    case '1':
-                    numdec=  numdec+1;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')){
-                        //si hay un numero despues, multiplico por 10
-                        numdec=numdec*10;
-                    }
-                    break;
-                    case '2':
-                    numdec=  numdec+2;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')){
-                        //si hay un numero despues, multiplico por 10
-                        numdec=numdec*10;
-                    }
-                    break;
-                    case '3':
-                    numdec=  numdec+3;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')){
-                        //si hay un numero despues, multiplico por 10
-                        numdec=numdec*10;
-                    }
-                    break;
-                    case '4':
-                    numdec=  numdec+4;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')){
-                        //si hay un numero despues, multiplico por 10
-                        numdec=numdec*10;
-                    }
-                    break;
-                    case '5':
-                    numdec=  numdec+5;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')){
-                        //si hay un numero despues, multiplico por 10
-                        numdec=numdec*10;
-                    }
-                    break;
-                    case '6':
-                    numdec=  numdec+6;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')){
-                        //si hay un numero despues, multiplico por 10
-                        numdec=numdec*10;
-                    }
-                    break;
-                    case '7':
-                    numdec=  numdec+7;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')){
-                        //si hay un numero despues, multiplico por 10
-                        numdec=numdec*10;
-                    }
-                    break;
-                    case '8':
-                    numdec=  numdec+8;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')){
-                        //si hay un numero despues, multiplico por 10
-                        numdec=numdec*10;
-                    }
-                    break;
-                    case '9':
-                    numdec=  numdec+9;
-                    if((( (*(p+1)) >= '0') || ((*(p+1)) <= '9')) && ((*(p+1)) != '\0')){
-                        //si hay un numero despues, multiplico por 10
-                        numdec=numdec*10;
-                    }
-                    break;
-                }
-
-            }
-            p++;
-        }
-        float divisor = 1;
-        int i = 1;
-        printf("counter= %d\n",counter);
-        for(i; i<counter;i++){
-            divisor = divisor*10;
-        }
-        num=num+(numdec/(divisor));
-        
-        if(numneg){
-            num = num*-1;
-        }
-        *f=num;
-    }    
-    return validacion;
-  }
-
+int is_a_number(char* cadena){
+    
+}
