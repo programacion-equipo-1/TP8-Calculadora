@@ -6,46 +6,59 @@
 //is_a_number toma el valor de un puntero a char, pensado para strings, en el que recorre el string 
 //y decide si ese string corresponde a un numero o no
 int is_a_number(char*p){
-    int es=1; //es indica la variable que guarda 1 si efectivamente es un numero
+    int es=1;
     int flag=0;
     int cantdig=0;
+    int neg=0;
     while((*p)!='\0'){
-        if( ((*p) >= '0') && ((*p) <= '9')){    //si es un numero el char actual incremento cuantos numeros me enontre y es sigue en 1
+        if((*p)=='-'){
+            neg=1;  
+        }
+        if( ((*p) >= '0') && ((*p) <= '9') ){
             cantdig++;
         }else if((*p) == '.'){
             flag++;
-        }else{          //si no es un numero o un punto entonces no es un numero y es =0 para siempre.
+        }else if((*p)=='-'){
+            if(cantdig>0){
+                es=0;
+            }
+        }else{
             es=0;
         }
+        
     p++;
     }
-    if(flag>1){ //si hay mas de un punto es=0
+    if(flag>1){
     es=0;
     }
-    if(cantdig==0){ //si no se introducen numeros es=0
+    if(cantdig==0){
         es=0;
     }
     return es;    
 }
 
-//le paso un puntero a char p donde inicia mi string y un puntero a float donde colocare en memoria
-//el valor del float correspondiente al string. SI NO ES VALIDO EL STRING NO SE MODIFICA MEMORIA.
 float str2float(char *p,float *f){
     float num=0;
     float numdec=0;
     int flag=0;
     int counter=0;
     int validacion;
+    int numneg;
     validacion = is_a_number(p);
     if(validacion){
         while((*p)!='\0'){
 
-            if((*p)=='.'){  //Se introduce este flag para distinguir con que parte del numero se trabaja
+            if((*p)=='.'){
                 flag=1;
             }
+            if((*p)=='-'){
+                numneg=1;
+            }
 
-        if( flag==0){    //para la parte del numero mayor  a 1 voy agregando los valores fijandome donde deben quedar
+        if( flag==0){
+            
             if( (((*p) >= '0') || ((*p) <= '9'))){
+                
                 switch(*p){
                     case '0':
                     num=  num+0;
@@ -118,10 +131,9 @@ float str2float(char *p,float *f){
                     }
                     break;
                 }
-
+                
             }
-        }else if(flag==1){//si trabajo con la parte menor a 1 tomo un contador de cuantos digitos para saber por que potencia de 10 dividir el numero restante
-            //habiendo dicho esto trabajo igual que con numeros mayores a 1 solo que al final divido y sumo.
+        }else if(flag==1){
             counter = counter +1;
             switch(*p){
 
@@ -207,7 +219,12 @@ float str2float(char *p,float *f){
             divisor = divisor*10;
         }
         num=num+(numdec/(divisor));
+        
+        if(numneg){
+            num = num*-1;
+        }
         *f=num;
     }    
     return validacion;
   }
+
