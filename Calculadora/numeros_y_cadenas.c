@@ -34,7 +34,6 @@ int str2float(char* cadena,float* numero){
                 } else if (*cadena == '.'){
                     estado=SIN_ENTERO;
                 } else {
-                    printf("Str2Float: ERROR\n");
                     return ERROR;
                 }
                 break;
@@ -46,7 +45,6 @@ int str2float(char* cadena,float* numero){
                 } else if (*cadena == '.'){
                     estado=SIN_ENTERO;
                 } else{
-                    printf("Str2Float: ERROR\n");
                     return ERROR;
                 }
                 break;
@@ -63,7 +61,6 @@ int str2float(char* cadena,float* numero){
                 } else if (*cadena == '\0'){
                     estado=SALIR;
                 } else {
-                    printf("Str2Float: ERROR\n");
                     return ERROR;
                 }
                 break;
@@ -74,7 +71,6 @@ int str2float(char* cadena,float* numero){
                     cifras_dec++;
                     estado=DECIMAL;
                 } else {
-                    printf("Str2Float: ERROR\n");
                     return ERROR;
                 }
                 break;
@@ -90,7 +86,6 @@ int str2float(char* cadena,float* numero){
                 } else if(*cadena == '\0'){
                     estado = SALIR;
                 } else {
-                    printf("Str2Float: ERROR\n");
                     return ERROR;
                 }
                 break;
@@ -106,7 +101,6 @@ int str2float(char* cadena,float* numero){
                     signo_expo=NEGATIVO;
                     estado=SIGNO_EXPO;
                 }else{
-                    printf("Str2Float: ERROR\n");
                     return ERROR;
                 }
                 break;
@@ -116,7 +110,6 @@ int str2float(char* cadena,float* numero){
                     expo = (*cadena)-'0';
                     estado=EXPO;
                 } else {
-                    printf("Str2Float: ERROR\n");
                     return ERROR;
                 }
                 break;
@@ -129,7 +122,6 @@ int str2float(char* cadena,float* numero){
                 }else if(*cadena =='\0'){
                     estado=SALIR;
                 }else{
-                    printf("Str2Float: ERROR\n");
                     return ERROR;
                 }
                 break;  
