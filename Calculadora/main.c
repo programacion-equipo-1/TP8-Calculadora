@@ -22,40 +22,45 @@
  * al modulo MANEJO DE ARREGLOS, puesto a que es el unico modulo que los emplea
  */
 
+// EJEMPLO DE USO: ./calculadora + x - 4 2 3 / ^ 3 2 3
+
 #include <stdio.h>
 #include "general.h"
 #include "operaciones.h"
 #include "manejo_de_arreglos.h"
 #include "calculador_recursivo.h"
 
-
+//Esta macro facilita la incializaciòn de las operaciones realizables por la calculadora
 #define agregar(simbolo,funcion) (error = error || add_op(simbolo,funcion))
 
 int main(int argc, char* argv[]) {
     
-    char** argumento = argv+1;
-    int error = FALSO;
-    float resultado;
+    char** argumento = argv+1;//Apunta, dentro del arreglo argv, al primer argumento despues del nombre del programa
+    int error = FALSO;//indicador de error auxiliar
+    float resultado;//resultado de las operaciones
     
-    
+    //Agrega las operaciones que puede realizar la  calculadora
     agregar('+',&suma);
     agregar('-',&resta);
     agregar('x',&multiplicacion);
     agregar('/',&division);
     agregar('^',&potencia_entera);
-    if (error == VERDAD){
+    
+    if (error == VERDAD){//Si ocurrio un error durante esta inicializacion, lo informa
         printf("Main: ERROR DE INICIALIZACIÓN - Programa abortado\n");
         return 0;
     }
     
-    error = calculador_recursivo(&argumento,&resultado);
-    if (error == VERDAD){
+    error = calculador_recursivo(&argumento,&resultado);//llama al calculador recursivo para que
+                                                        //realice las operaciones ingresadas
+    
+    if (error == VERDAD){//Si ocurrio un error de operacion (ej, dividir por 0) lo informa
         printf("Main: ERROR DE OPERACIÓN - Programa abortado\n");
         return 0;
     }
     
-    printf("RESULTADO:\n\t%g\n",resultado);
-    printf("Que tenga un maravilloso día ♡ ♡ ♡\n");
+    printf("RESULTADO:\n\t%g\n",resultado);//Si no ocurrio ningun error, imprime el resultado
+    printf("Que tenga un maravilloso día ♡ ♡ ♡\n"); //Aww que tierno...
 
     return 0;
 }

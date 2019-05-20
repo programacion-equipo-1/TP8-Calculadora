@@ -28,10 +28,25 @@
  *  Por ejemplo,
  *      + - 5 3 x 2 4
  *  Se traduce a
- *  (5-3)x(2*4) = 10
+ *  (5-3)+(2x4) = 10
  * 
  * NOTA: deben de haberse inicializado los arreglos del módulo MANEJO_DE_ARREGLOS antes de su uso
  * NOTA: el puntero al arreglo de punteros se verá modificado en cada llamado a esta función.
+ */
+
+
+//      EJEMPLO DE USO: (con argv)
+/*                                              char* argv[]
+ *   char*** primer_arg   char** argumento       __________
+ *       __________        ___________          |__________| -------> "calculadora"
+ *      |___next___| ---> |___*next___| ------> |__**next__| -------> "+"
+ *                                              |__________| -------> "27"
+ *      Manipulada          Creada en           |__________| -------> "42"
+ *      por la              el main             |___NULL___|
+ *      calculadora         (modificada por
+ *      recursiva           la calculadora)
+ * 
+ * 
  */
 
 int calculador_recursivo(char*** primer_argumento,float* rta);

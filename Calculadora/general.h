@@ -13,6 +13,7 @@
 #ifndef GENERAL_H
 #define GENERAL_H
 
+//Empleada como salida de varias funciones
 #define ERROR 1
 #define SIN_ERROR 0
 

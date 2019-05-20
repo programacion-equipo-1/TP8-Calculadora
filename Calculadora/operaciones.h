@@ -18,11 +18,15 @@
 
 #ifndef OPERACIONES_H
 #define OPERACIONES_H
-
+//Suma dos nùmeros: op1 + op2
 int suma(float op1,float op2,float* rta);
+//Resta el segundo operando al primero: op1 - op2
 int resta(float op1,float op2,float* rta);
+//Divide el primer operando entre el segundo: op1 / op2
 int division(float op1,float op2,float* rta);
+//Multiplica dos nùmeros: op1 x op2
 int multiplicacion(float op1,float op2,float* rta);
+//Eleva el primer operando a la potencia indicada por el segundo (casteado a int): op1 ^ (int) op2
 int potencia_entera(float op1,float op2,float* rta);
 
 #endif /* OPERACIONES_H */

@@ -13,8 +13,6 @@
         <gdb_interceptlist>
           <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
         </gdb_interceptlist>
-        <gdb_signals>
-        </gdb_signals>
         <gdb_options>
           <DebugOptions>
           </DebugOptions>
@@ -26,7 +24,6 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" - * / 15 - 7 + 1 1 3 + 2 + 1 1</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" - x / 15 - 7 + 1 1 3 + 2 + 1 1</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" / 2 0</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" ^ 2 4</runcommandpicklistitem>
@@ -36,8 +33,9 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}" ^ 0 -5</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" ^ 2 4.99</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" ^ 1.01 89</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" + x - 4 2 3 / ^ 3 2 3</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" ^ 1.01 89</runcommand>
+        <runcommand>"${OUTPUT_PATH}" + x - 4 2 3 / ^ 3 2 3</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>
